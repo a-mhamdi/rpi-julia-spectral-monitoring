@@ -1,0 +1,39 @@
+%!TEX program = xelatex
+\documentclass{standalone}
+\usepackage{ifpdf}
+\usepackage{tikz}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, backgrounds, fit, positioning, shapes.geometric, calc, decorations.pathreplacing, decorations.markings}
+
+\usepackage{xltxtra}
+\usepackage{xunicode}
+
+% Fonts
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+
+\usepackage{newtxsf}
+%\setmainfont[Ligatures=TeX, UprightFont=*-Regular, BoldFont=*-Bold, SmallCapsFont=*-SmallCaps, ItalicFont=*-Italic]{Delicious} % {Fontin}
+\setmainfont{Fira Sans}
+\usepackage{mathastext}
+
+\input{./wave.tex}
+
+\usepackage{comment}
+\begin{document}
+
+\begin{wave}{2}{12}{.5}{.6}
+    \nextwave{}\bit{1}{1}\bit{0}{3}\bit{1}{1}\bit{0}{1}\bit{1}{3}\bit{0}{1}\bit{1}{3}
+    \node[left,rotate=90] at (0.5,-1.5) {IDLE};
+    \node[left,rotate=90] at (1.5,-1.5) {START};
+    \draw[-latex] (5.15,-2) to (2,-2);
+    \draw[-latex] (6.85,-2) to (10,-2);
+    \node at (6,-2) {DATA};
+    \node[left,rotate=90] at (10.5,-1.5) {PARITY};
+    \node[left,rotate=90] at (11.5,-1.5) {STOP};
+\end{wave}
+
+\end{document}
