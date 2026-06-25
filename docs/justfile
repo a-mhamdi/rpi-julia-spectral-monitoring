@@ -1,5 +1,5 @@
 src := "main.typ"
-out := "RPi-Onramp.pdf"
+out := "rpi-julia-spectral-monitoring.pdf"
 
 build:
     typst compile {{ src }} {{ out }}
