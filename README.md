@@ -1,5 +1,7 @@
 
-# Raspberry Pi & Julia — Embedded DSP and Anomaly Detection
+# Raspberry Pi & Julia
+
+## Embedded DSP and Anomaly Detection
 
 This repository documents the use of **Julia** for embedded signal processing and anomaly detection on the **Raspberry Pi**, covering the full communication stack required for real-world hardware interfacing:
 
