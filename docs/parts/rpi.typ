@@ -19,21 +19,9 @@ The official operating system is *Raspberry Pi OS* (formerly called Raspbian unt
 
 ---
 
-Before installing any software, it is good practice to refresh the local package index and then apply all available upgrades:
-```bash
-sudo apt update  # refresh the package list
-sudo apt full-upgrade  # upgrade packages, handling dependency changes
-```
-
-`full-upgrade` is preferred over `upgrade` because it correctly handles cases where packages need to be added or removed to satisfy updated dependencies.
-
-To install a specific package:
-```bash
-sudo apt install git  # install git
-```
+---
 
 == Connectivity and Network Configuration
-
 #title-slide("Connectivity", "Testing and Setting Up Wi-Fi")
 
 === Checking Connectivity
@@ -44,6 +32,25 @@ ping raspberrypi.local
 ```
 
 If the ping succeeds, the Pi is on the network and responding to mDNS (multicast DNS) queries. If it fails, check the physical Ethernet connection.
+
+---
+
+#info[Create a new connection profile of type Ethernet on the physical interface enp4s0. The PC will act as a DHCP server and automatically assign an IP address to any device connected via Ethernet (the Pi), while also enabling NAT to share the laptop's internet connection.
+  ```bash
+  nmcli connection add type ethernet ifname enp4s0 con-name "rpi-share" ipv4.method shared
+  ```
+  Activate and inspect the connection
+  ```bash
+  nmcli connection up "rpi-share"
+  nmcli connection show "rpi-share"
+  ```
+  Perform a ping sweep across all 254 addresses, without port scanning
+  ```bash
+  nmap -sn 10.42.0.0/24
+  ```
+]
+
+---
 
 === Wi-Fi Configuration
 
@@ -61,10 +68,30 @@ sudo nmcli dev wifi connect "SSID_NAME" password "WIFI_PASSWORD"
 
 Replace `SSID_NAME` with the network name and `WIFI_PASSWORD` with the password. The `sudo` prefix is required because Wi-Fi configuration is a privileged operation.
 
+---
+
 #warning[Make sure your machine is connected to the same network as the Pi. Once Wi-Fi is configured, you can remove the Ethernet cable while staying connected to the Raspberry Pi terminal. If you disconnect before this step, you will lose connectivity and must reconnect via Ethernet to fix the Wi-Fi configuration.]
 
-== SSH Setup
+---
 
+=== Packages Installation
+
+Before installing any software, it is good practice to refresh the local package index and then apply all available upgrades:
+```bash
+sudo apt update  # refresh the package list
+sudo apt full-upgrade  # upgrade packages, handling dependency changes
+```
+
+`full-upgrade` is preferred over `upgrade` because it correctly handles cases where packages need to be added or removed to satisfy updated dependencies.
+
+To install a specific package:
+```bash
+sudo apt install <package_name>
+```
+
+---
+
+== SSH Setup
 #title-slide("SSH", "Secure Shell Configuration")
 
 SSH (Secure Shell) is a cryptographic network protocol for secure remote access to a machine over an unsecured network. On Raspberry Pi OS, the `openssh-server` package is already installed but *disabled by default* for security reasons.
@@ -95,23 +122,6 @@ Once SSH is enabled, connect from another machine with:
 ssh <username>@<hostname>.local
 # e.g. ssh pi@raspberrypi.local
 ```
-
----
-
-#info[Create a new connection profile of type Ethernet on the physical interface enp4s0. The PC will act as a DHCP server and automatically assign an IP address to any device connected via Ethernet (the Pi), while also enabling NAT to share the laptop's internet connection.
-  ```bash
-  nmcli connection add type ethernet ifname enp4s0 con-name "rpi-share" ipv4.method shared
-  ```
-  Activate and inspect the connection
-  ```bash
-  nmcli connection up "rpi-share"
-  nmcli connection show "rpi-share"
-  ```
-  Perform a ping sweep across all 254 addresses, without port scanning
-  ```bash
-  nmap -sn 10.42.0.0/24
-  ```
-]
 
 ---
 
@@ -238,12 +248,12 @@ Git is a distributed version control system that tracks changes to files and dir
 
 GitHub is a cloud-based hosting platform for Git repositories. It adds collaboration features such as pull requests, issues, and Actions on top of standard Git.
 
+---
+
 To install Git:
 ```bash
 sudo apt install git
 ```
-
----
 
 Basic initial configuration:
 ```bash
