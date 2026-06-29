@@ -21,13 +21,13 @@ end
 predict(model, 5.) |> println
 =#
 
-model(-5.) |> println
+# model(-5.) |> println
 
 loss = []
-for i in 1:10_000
+for i in 1:1_000
     y_pred = model(x[i])
     epsilon = y_pred - y[i]
-    l = 1/2 * (epsilon)^2
+    l = 1 / 2 * (epsilon)^2
     push!(loss, l)
 
     model.w -= 0.1 * epsilon * x[i]
@@ -37,6 +37,5 @@ end
 println(model.w, " ", model.b)
 
 using Plots
-unicodeplots() # switch to UnicodePlots
-x = 1:0.1:5
-plot(1:10_000, loss, label="data")
+plot(1:1_000, loss, label="Loss", xlabel="Iteration", ylabel="Loss", title="Loss over iterations", legend=nothing)
+savefig("../docs/images/basic-backprop.svg")

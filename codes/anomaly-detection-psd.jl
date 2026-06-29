@@ -7,13 +7,11 @@ using Statistics
 using Plots
 
 # PARAMETERS
-
 fs = 1000.0  # sampling frequency (Hz)
 N = 1024  # samples per frame
 t = (0:N-1) ./ fs  # time vector  (~1 s)
 
 # SIGNALS
-
 noise = 0.05 .* randn(N)  # Gaussian noise
 baseline = sin.(2π * 50.0 .* t) .+ 0.5 .* sin.(2π * 120.0 .* t) .+ noise
 
@@ -42,11 +40,13 @@ function welch_psd(x, fs; seg_len=256, overlap=128)
     return freqs, psd
 end
 
+## HANN WINDOW
+# plot(0.5 * (1 .- cos.(2π .* (0:255) ./ 255)), label="Hann window", xlabel="Sample index", ylabel="Amplitude", title="Hann window (256 samples)", legend=:topright)
+
 freqs, psd_base = welch_psd(baseline, fs)
 _, psd_anom = welch_psd(anomaly, fs)
 
 # DETECT ANOMALY (Flag bins where anomalous PSD exceeds baseline by > 3σ of the baseline PSD distribution)
-
 residual = psd_anom .- psd_base
 threshold = mean(residual) + 3.0 * std(residual)
 
@@ -58,7 +58,6 @@ println("Flagged frequencies  : $(round.(flagged_freqs, digits=1)) Hz")
 # → expected peaks at 50, 120 Hz (normal) + 200 Hz (anomaly)
 
 # PLOT
-
 p1 = plot(freqs, psd_base;
     label="Baseline PSD",
     color=RGB(0.01, 0.50, 0.56),

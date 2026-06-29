@@ -6,7 +6,6 @@ using FFTW
 using Plots
 
 # BUILD THE SIGNAL
-
 fs = 1000.0  # sampling frequency (Hz)
 N = 1024  # number of samples (power of 2 → fast FFT)
 t = (0:N-1) ./ fs  # time vector
@@ -19,12 +18,11 @@ x_anom = copy(x_base)
 x_anom .+= 0.6 .* sin.(2π * 200.0 .* t)
 
 # FFT
-
-freqs = (0:N÷2-1) .* (fs / N)  # one-sided frequency axis
+freqs = (0:N÷2-1) .* (fs / N)  # one-sided frequency axis: fs/N is the frequency resolution
 mag_base = abs.(fft(x_base)[1:N÷2]) ./ N
 mag_anom = abs.(fft(x_anom)[1:N÷2]) ./ N
 
-mag_base[2:end-1] .*= 2.0
+mag_base[2:end-1] .*= 2.0  # double but exclude dc and nyquist
 mag_anom[2:end-1] .*= 2.0
 
 # DETECT ANOMALIES
@@ -36,7 +34,6 @@ flagged_freqs = freqs[flagged_idx]
 println("Flagged frequencies: $(round.(flagged_freqs, digits=1)) Hz")
 
 # PLOT
-
 p1 = plot(freqs, mag_base;
     seriestype=:sticks,
     label="Baseline spectrum",

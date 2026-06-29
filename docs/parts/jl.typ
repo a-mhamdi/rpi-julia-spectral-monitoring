@@ -176,6 +176,6 @@ julia script.jl
       #url-block("codes/basic-backprop.jl")
   ],
   [
-    #align(center)[#image("../images/basic-backprop.png", height: 80%)]
+    #align(center)[#image("../images/basic-backprop.svg", height: 70%)]
   ],
 )
